@@ -1,0 +1,35 @@
+{
+  "name": "@solidsuite/attendance-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent chạy trong mạng công ty, đẩy dữ liệu máy chấm công về SolidSuite ERP",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint src/",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.15.18",
+    "@types/pg": "^8.11.10",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
+    "tsx": "^4.22.3",
+    "typescript": "^5.8.3"
+  },
+  "jest": {
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": { "^.+\\.ts$": ["ts-jest", { "isolatedModules": true }] },
+    "testEnvironment": "node"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "erp": {
+    "baseUrl": "https://erp.123website.com.vn",
+    "apiKey": "ĐẶT BẰNG BIẾN MÔI TRƯỜNG ERP_API_KEY",
+    "deviceCode": "MCC01",
+    "timeoutMs": 30000
+  },
+  "source": {
+    "type": "postgres",
+    "connectionString": "ĐẶT BẰNG BIẾN MÔI TRƯỜNG SOURCE_DATABASE_URL",
+    "query": "SELECT id, employee_code, punched_at, direction, method FROM attendance_logs WHERE id > $1::bigint ORDER BY id ASC LIMIT $2",
+    "columns": {
+      "externalId": "id",
+      "employeeCode": "employee_code",
+      "punchedAt": "punched_at",
+      "direction": "direction",
+      "method": "method"
+    },
+    "watermarkColumn": "id",
+    "initialWatermark": "0"
+  },
+  "batchSize": 500,
+  "intervalSeconds": 60,
+  "statePath": "/var/lib/solid-attendance-agent/state.json"
+}
