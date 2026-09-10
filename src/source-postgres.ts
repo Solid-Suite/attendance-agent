@@ -13,6 +13,11 @@ export interface SourceBatch {
   punches: PunchPayload[];
   /** Watermark mới = giá trị cột watermark của dòng cuối cùng. */
   watermark: string;
+  /** Số dòng bị bỏ vì thiếu khoá hoặc thiếu thời gian. Phải nổi lên tới log:
+   *  dữ liệu chấm công biến mất im lặng là sai công của người ta. */
+  skipped: number;
+  /** Tổng số dòng database trả về, kể cả dòng bị bỏ. */
+  rowsRead: number;
 }
 
 export interface PunchSource {
@@ -91,9 +96,9 @@ export class PostgresSource implements PunchSource {
   async fetchAfter(watermark: string, limit: number): Promise<SourceBatch> {
     const res = await this.pool.query(this.cfg.source.query, [watermark, limit]);
     const rows = res.rows as Record<string, unknown>[];
-    if (rows.length === 0) return { punches: [], watermark };
+    if (rows.length === 0) return { punches: [], watermark, skipped: 0, rowsRead: 0 };
 
-    const { punches } = mapRows(rows, this.cfg.source.columns);
+    const { punches, skipped } = mapRows(rows, this.cfg.source.columns);
 
     // Watermark lấy từ dòng CUỐI của kết quả, kể cả khi dòng đó bị bỏ qua —
     // nếu không, một dòng hỏng sẽ chặn agent đứng tại chỗ vĩnh viễn.
@@ -101,7 +106,7 @@ export class PostgresSource implements PunchSource {
     const next = last[this.cfg.source.watermarkColumn];
     const nextWatermark = next instanceof Date ? next.toISOString() : String(next ?? watermark);
 
-    return { punches, watermark: nextWatermark };
+    return { punches, watermark: nextWatermark, skipped, rowsRead: rows.length };
   }
 
   async close(): Promise<void> {

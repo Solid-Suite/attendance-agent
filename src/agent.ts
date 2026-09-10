@@ -68,6 +68,15 @@ export class Agent {
     const { config, source, client } = this.deps;
     const batch = await source.fetchAfter(this.state.watermark, config.batchSize);
 
+    // Dòng bị bỏ phải nói ra. Trước đây con số này bị vứt đi nên dữ liệu
+    // chấm công hỏng biến mất im lặng, không ai biết mà đi sửa nguồn.
+    if (batch.skipped > 0) {
+      this.logger.warn(
+        `Bỏ qua ${batch.skipped}/${batch.rowsRead} dòng vì thiếu mã nhân viên hoặc thời điểm quẹt. ` +
+          `Kiểm lại cột đã khai trong config và dữ liệu nguồn.`,
+      );
+    }
+
     if (batch.punches.length === 0) {
       // Cả lô toàn dòng hỏng: watermark vẫn phải nhích lên, nếu không agent kẹt
       // mãi ở đúng chỗ đó.
