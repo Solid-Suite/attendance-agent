@@ -91,11 +91,10 @@ cp .env.example .env
 cp config.example.json config.json
 ```
 
-Sửa `.env` và `config.json`, sau đó đăng nhập GHCR bằng token chỉ có quyền
-`read:packages` và khởi động:
+Sửa `.env` và `config.json`, sau đó khởi động. Image GHCR là public nên không
+cần tài khoản GitHub hay `docker login`:
 
 ```bash
-echo "$GHCR_TOKEN" | docker login ghcr.io -u GITHUB_USERNAME --password-stdin
 docker compose pull
 docker compose up -d
 docker compose logs -f attendance-agent
