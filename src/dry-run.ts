@@ -86,7 +86,7 @@ export async function runDryRun(
     logger.info(`Mẫu ${Math.min(SAMPLE_SIZE, result.usable)} dòng sẽ gửi lên ERP:`);
     for (const punch of result.sample) {
       // Bỏ trường raw khi in: nó là cả dòng database gốc, in ra thì ngập màn hình.
-      const { raw, ...shown } = punch as Record<string, unknown>;
+      const { raw: _raw, ...shown } = punch as Record<string, unknown>;
       logger.info(`  ${JSON.stringify(shown)}`);
     }
     logger.info('');

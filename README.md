@@ -82,7 +82,35 @@ Sai thì triệu chứng:
 
 ## Cài đặt
 
-### Docker (khuyến nghị)
+### Docker Compose từ GHCR (khuyến nghị)
+
+Máy cài chỉ cần Docker. Không cần clone toàn bộ SolidSuite, Node.js hay pnpm.
+
+```bash
+cp .env.example .env
+cp config.example.json config.json
+```
+
+Sửa `.env` và `config.json`, sau đó đăng nhập GHCR bằng token chỉ có quyền
+`read:packages` và khởi động:
+
+```bash
+echo "$GHCR_TOKEN" | docker login ghcr.io -u GITHUB_USERNAME --password-stdin
+docker compose pull
+docker compose up -d
+docker compose logs -f attendance-agent
+```
+
+Image production dùng tag phiên bản cố định:
+
+```text
+ghcr.io/solid-suite/attendance-agent:0.1.0
+```
+
+Để nâng cấp, đổi `AGENT_VERSION` trong `.env`, rồi chạy lại `docker compose
+pull` và `docker compose up -d`.
+
+### Tự build Docker image
 
 ```bash
 docker build -t solid-attendance-agent .

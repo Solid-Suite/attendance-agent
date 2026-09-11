@@ -1,0 +1,14 @@
+services:
+  attendance-agent:
+    image: ghcr.io/solid-suite/attendance-agent:${AGENT_VERSION:-0.1.0}
+    container_name: solid-attendance-agent
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - attendance-agent-state:/var/lib/solid-attendance-agent
+
+volumes:
+  attendance-agent-state:
+
