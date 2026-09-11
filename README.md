@@ -3,6 +3,8 @@
 Chạy trong mạng công ty, đọc dữ liệu chấm công từ PostgreSQL của công ty và đẩy
 về SolidSuite ERP qua HTTPS.
 
+**Triển khai cho Akareal:** xem [hướng dẫn cài đặt và nghiệm thu dành cho đội IT](docs/akareal-deployment.md).
+
 **Chỉ gọi ra.** Không mở cổng nào vào mạng công ty, không cần VPN, không cần
 public database ra internet.
 
